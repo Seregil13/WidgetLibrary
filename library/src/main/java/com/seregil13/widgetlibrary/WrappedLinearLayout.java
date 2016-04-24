@@ -26,10 +26,13 @@ package com.seregil13.widgetlibrary;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,32 +49,36 @@ public class WrappedLinearLayout extends LinearLayout {
     private int childrenWidth;
     private Integer screenWidth = null;
 
+    private Context mContext;
+
 
     public WrappedLinearLayout(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public WrappedLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public WrappedLinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public WrappedLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
         this.rowLayouts = new ArrayList<>();
         this.childrenWidth = 0;
         this.setOrientation(VERTICAL);
+
+        this.mContext = context;
 
         createRowLayout();
     }
@@ -105,6 +112,27 @@ public class WrappedLinearLayout extends LinearLayout {
             } else {
                 this.rowLayouts.get(this.rowLayouts.size() - 1).addView(child);
             }
+        }
+    }
+
+    public void addTextView(String s) {
+        /* Creates a textview to hold the genre */
+        TextView view = new TextView(mContext);
+        view.setText(s);
+        view.setBackgroundResource(R.drawable.border);
+        view.setTextColor(Color.WHITE);
+        view.setPadding(15,10,15,10);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(10,10,10,10);
+        view.setLayoutParams(params);
+
+        this.addView(view);
+    }
+
+    public void addTextViews(ArrayList<String> als) {
+        for (String s : als) {
+            addTextView(s);
         }
     }
 }
