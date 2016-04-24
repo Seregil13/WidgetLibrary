@@ -83,10 +83,25 @@ public class WrappedLinearLayout extends LinearLayout {
         createRowLayout();
     }
 
+    @Override
+    public void removeAllViews() {
+        super.removeAllViews();
+        createRowLayout();
+    }
+
     private void createRowLayout() {
         LinearLayout layout = new LinearLayout(this.getContext());
-        layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        layout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         layout.setOrientation(HORIZONTAL);
+
+        switch (this.rowLayouts.size()) {
+            case 0:
+                layout.setBackgroundColor(0x0000ff);
+                break;
+            case 1:
+                layout.setBackgroundColor(0xff0000);
+                break;
+        }
 
         this.addView(layout);
         this.rowLayouts.add(layout);
@@ -102,7 +117,7 @@ public class WrappedLinearLayout extends LinearLayout {
                 this.screenWidth = this.getWidth();
             }
             child.measure(0, 0);
-            childrenWidth += child.getMeasuredWidth();
+            childrenWidth += child.getMeasuredWidth() + child.getPaddingLeft() + child.getPaddingRight();
 
             if (childrenWidth >= this.screenWidth) {
                 createRowLayout();
@@ -130,8 +145,8 @@ public class WrappedLinearLayout extends LinearLayout {
         this.addView(view);
     }
 
-    public void addTextViews(ArrayList<String> als) {
-        for (String s : als) {
+    public void addTextViews(ArrayList<String> strings) {
+        for (String s : strings) {
             addTextView(s);
         }
     }
